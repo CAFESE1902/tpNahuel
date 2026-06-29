@@ -1,4 +1,3 @@
-
 <!DOCTYPE html>
 <html lang="es">
 <head>
@@ -9,7 +8,7 @@
 <body>
     <div class="container">
 
-        
+        <!-- Register View -->
         <div id="vista-registro">
             <h2>Crear cuenta</h2>
             <input type="text" id="reg-name" placeholder="Nombre">
@@ -19,7 +18,7 @@
             <p>¿Ya tenés cuenta? <a href="#" onclick="mostrarLogin()">Iniciar sesión</a></p>
         </div>
 
-    
+        <!-- Login View -->
         <div id="vista-login" style="display:none;">
             <h2>Iniciar sesión</h2>
             <input type="email" id="login-email" placeholder="Email">
@@ -28,26 +27,50 @@
             <p>¿No tenés cuenta? <a href="#" onclick="mostrarRegistro()">Registrarme</a></p>
         </div>
 
-    
-    <!-- Vista PROTEGIDA (solo si estás logueado) -->
+        <!-- Protected View -->
         <div id="vista-protegida" style="display:none;">
             <h2>Productos 🛒</h2>
 
+            <!-- Add Product Form -->
+            <h3>Agregar Producto</h3>
             <input type="text" id="prod-name" placeholder="Nombre del producto">
             <input type="number" id="prod-price" placeholder="Precio">
             <input type="number" id="prod-quantity" placeholder="Cantidad">
             <input type="number" id="prod-categoryId" placeholder="ID de categoría">
             <button onclick="agregarProducto()">Agregar producto</button>
 
+            <!-- Category List -->
+            <div id="lista-categorias"></div>
+
+            <!-- Product List -->
             <ul id="lista-productos"></ul>
 
-            <button onclick="cerrarSesion()">Cerrar sesión</button>
+            <!-- Edit Form (hidden) -->
+            <div id="formulario-edicion" style="display: none;">
+                <h3>Editar Producto</h3>
+                <input type="hidden" id="edit-id">
+                <input type="text" id="edit-name" placeholder="Nombre">
+                <input type="number" id="edit-price" placeholder="Precio">
+                <input type="number" id="edit-quantity" placeholder="Cantidad">
+                <input type="number" id="edit-categoryId" placeholder="ID Categoría">
+                <button onclick="guardarEdicion()">💾 Guardar cambios</button>
+                <button onclick="cerrarFormularioEdicion()" style="background: #ff4444;">❌ Cancelar</button>
+            </div>
+
+            <button onclick="cerrarSesion()" class="cerrar-sesion">Cerrar sesión</button>
         </div>
 
+        <!-- Message Display -->
         <p id="mensaje"></p>
 
     </div>
 
+    <script>
+        function guardarEdicion() {
+            const id = document.getElementById("edit-id").value;
+            actualizarProducto(id);
+        }
+    </script>
     <script src="script.js"></script>
 </body>
 </html>

@@ -1,7 +1,8 @@
 /* Variables: tus dos colores, definidos una sola vez */
 :root {
-  --color-fondo: #0d0d0d;     /* negro casi puro (fondo) */
-    --color-acento: #44d62c;    
+  --color-fondo: #0d0d0d;
+  --color-acento: #44d62c;
+  --color-error: #ff4444;
 }
 
 * {
@@ -16,21 +17,34 @@ body {
     color: white;
     display: flex;
     justify-content: center;
-    align-items: center;
+    align-items: flex-start;
     min-height: 100vh;
+    padding: 20px;
 }
 
 .container {
     background-color: rgba(255, 255, 255, 0.05);
     padding: 40px;
     border-radius: 12px;
-    width: 320px;
+    width: 100%;
+    max-width: 600px;  /* Wider! */
     text-align: center;
 }
 
 h2 {
     margin-bottom: 20px;
     color: var(--color-acento);
+}
+
+h3 {
+    margin: 15px 0 10px;
+    color: var(--color-acento);
+}
+
+h4 {
+    margin: 10px 0;
+    color: #aaa;
+    font-size: 14px;
 }
 
 input {
@@ -51,19 +65,93 @@ button {
     border-radius: 6px;
     background-color: var(--color-acento);
     color: var(--color-fondo);
-    font-weight: bold;
     cursor: pointer;
+    font-weight: bold;
 }
 
 button:hover {
-    opacity: 0.85;
+    opacity: 0.9;
 }
 
+/* Product list styling */
+#lista-productos {
+    list-style: none;
+    padding: 0;
+    margin: 20px 0;
+    text-align: left;
+}
+
+#lista-productos li {
+    background-color: rgba(255, 255, 255, 0.05);
+    padding: 12px 15px;
+    margin-bottom: 8px;
+    border-radius: 8px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    border: 1px solid #333;
+}
+
+#lista-productos li span {
+    flex: 1;
+    font-size: 14px;
+}
+
+#lista-productos li button {
+    width: auto;
+    padding: 6px 10px;
+    margin: 0 3px;
+    font-size: 12px;
+}
+
+/* Category list */
+#lista-categorias {
+    background-color: rgba(68, 214, 44, 0.1);
+    padding: 10px 15px;
+    border-radius: 8px;
+    margin-bottom: 15px;
+    text-align: left;
+    border: 1px solid rgba(68, 214, 44, 0.3);
+}
+
+#lista-categorias p {
+    font-size: 13px;
+    margin: 3px 0;
+    color: #ccc;
+}
+
+/* Edit form */
+#formulario-edicion {
+    background-color: rgba(255, 255, 255, 0.08);
+    padding: 20px;
+    border-radius: 8px;
+    margin-top: 15px;
+    border: 1px solid var(--color-acento);
+}
+
+#formulario-edicion input {
+    margin-bottom: 10px;
+}
+
+/* Links */
 a {
     color: var(--color-acento);
+    text-decoration: none;
 }
 
-p {
-    margin-top: 16px;
+a:hover {
+    text-decoration: underline;
+}
+
+/* Message */
+#mensaje {
+    margin-top: 15px;
     font-size: 14px;
+    min-height: 20px;
+}
+
+/* Logout button */
+.cerrar-sesion {
+    background-color: var(--color-error) !important;
+    margin-top: 20px;
 }

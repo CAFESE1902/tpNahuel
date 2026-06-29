@@ -1,4 +1,5 @@
 import { prisma } from "./db.js";
+import bcrypt from "bcrypt";
 
 async function main() {
     await prisma.orderItem.deleteMany();
@@ -10,22 +11,30 @@ async function main() {
     const user = await prisma.user.create({
         data: {
             name: "Sebastian Cabrera",
-            email: "sebaacabrera@example.com",
+            email: "sebaacabrera@example.com", 
+            password: await bcrypt.hash("123456", 10)
         },
     });
     console.log("Usuario creado:", user);
 
-    const categoria = await prisma.category.create({
+    // Create TWO categories with DIFFERENT variable names
+    const categoriaAlmacen = await prisma.category.create({
+        data: { name: "almacen" }
+    });
+    console.log("Categoría creada:", categoriaAlmacen);
+
+    const categoriaBebidas = await prisma.category.create({
         data: { name: "bebidas" }
     });
-    console.log("Categoría creada:", categoria);
+    console.log("Categoría creada:", categoriaBebidas);
 
+    // Create products using different categories
     const product1 = await prisma.product.create({
         data: {
             name: "Fernet",
             price: 17500,
             quantity: 10,
-            categoryId: categoria.id,
+            categoryId: categoriaBebidas.id,  // Fernet goes in bebidas
         },
     });
 
@@ -34,7 +43,7 @@ async function main() {
             name: "tabaco",
             price: 3500,
             quantity: 20,
-            categoryId: categoria.id,
+            categoryId: categoriaAlmacen.id,  // tabaco goes in almacen
         },
     });
     console.log("Productos creados:", product1, product2);
@@ -52,16 +61,16 @@ async function main() {
     });
     console.log("Orden creada:", orden);
 
-    // 5. CONSULTA: traer la orden con usuario, productos y categorías
+    // Query: order with user, products, and categories
     const ordenCompleta = await prisma.order.findUnique({
         where: { id: orden.id },
         include: {
-            user: true,                          
-            orderItems: {                        
+            user: true,
+            orderItems: {
                 include: {
-                    product: {                   
+                    product: {
                         include: {
-                            category: true       
+                            category: true
                         }
                     }
                 }
@@ -69,7 +78,6 @@ async function main() {
         }
     });
     console.log("Orden completa:", JSON.stringify(ordenCompleta, null, 2));
-
 }
 
 main()

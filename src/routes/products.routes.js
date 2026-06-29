@@ -165,21 +165,26 @@ router.get("/products/:id", validateProductId, validateFields, async (req, res, 
  * Response: 5 (la cantidad del producto eliminado)
  */
 router.delete("/products/:id", validateProductId, validateFields, async (req, res, next) => {
-	try {
-		// Elimina el producto con el ID especificado.
-		const product = await prisma.product.delete({
-			where: {
-				id: Number(req.params.id),
-			},
-		});
-		// Envia la cantidad del producto eliminado como respuesta.
-		res.json(product.quantity);
-	} catch (error) {
-		// Propaga el error al middleware de manejo de errores.
-		next(error);
-	}
-});
+    try {
+        // First, delete all OrderItems referencing this product
+        await prisma.orderItem.deleteMany({
+            where: {
+                productId: Number(req.params.id)
+            }
+        });
 
+        // Then delete the product
+        const product = await prisma.product.delete({
+            where: {
+                id: Number(req.params.id),
+            },
+        });
+        
+        res.json({ message: `Producto eliminado`, quantity: product.quantity });
+    } catch (error) {
+        next(error);
+    }
+});
 /**
  * PATCH /products/:id
  * Actualiza parcialmente un producto existente.
