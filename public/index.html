@@ -1,0 +1,53 @@
+
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <title>maxikiosco</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <div class="container">
+
+        
+        <div id="vista-registro">
+            <h2>Crear cuenta</h2>
+            <input type="text" id="reg-name" placeholder="Nombre">
+            <input type="email" id="reg-email" placeholder="Email">
+            <input type="password" id="reg-password" placeholder="Contraseña">
+            <button onclick="registrar()">Registrarme</button>
+            <p>¿Ya tenés cuenta? <a href="#" onclick="mostrarLogin()">Iniciar sesión</a></p>
+        </div>
+
+    
+        <div id="vista-login" style="display:none;">
+            <h2>Iniciar sesión</h2>
+            <input type="email" id="login-email" placeholder="Email">
+            <input type="password" id="login-password" placeholder="Contraseña">
+            <button onclick="login()">Entrar</button>
+            <p>¿No tenés cuenta? <a href="#" onclick="mostrarRegistro()">Registrarme</a></p>
+        </div>
+
+    
+    <!-- Vista PROTEGIDA (solo si estás logueado) -->
+        <div id="vista-protegida" style="display:none;">
+            <h2>Productos 🛒</h2>
+
+            <input type="text" id="prod-name" placeholder="Nombre del producto">
+            <input type="number" id="prod-price" placeholder="Precio">
+            <input type="number" id="prod-quantity" placeholder="Cantidad">
+            <input type="number" id="prod-categoryId" placeholder="ID de categoría">
+            <button onclick="agregarProducto()">Agregar producto</button>
+
+            <ul id="lista-productos"></ul>
+
+            <button onclick="cerrarSesion()">Cerrar sesión</button>
+        </div>
+
+        <p id="mensaje"></p>
+
+    </div>
+
+    <script src="script.js"></script>
+</body>
+</html>

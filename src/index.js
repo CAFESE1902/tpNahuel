@@ -1,0 +1,62 @@
+import express from "express";
+import productRoutes from "./routes/products.routes.js";
+import categoryRoutes from "./routes/categories.routes.js";
+import authRoutes from "./routes/auth.routes.js";
+import cors from "cors";
+import { prisma } from "./db.js";
+import path from "path";
+import { fileURLToPath } from "url";
+
+
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = path.dirname(__filename);
+
+const app = express();
+let server;
+
+app.use(cors());
+app.use(express.json());
+app.use(express.static(path.join(__dirname, "..", "public")));
+app.use("/api", productRoutes);
+app.use("/api", categoryRoutes);
+app.use("/api", authRoutes);
+app.use((err, req, res, next) => {
+   
+   console.error(err);
+
+   res.status(err.statusCode || 500).json({
+       error: err.message || "Error Interno  del Servidor",
+   });
+});
+
+async function shutdown(signal) {
+    if (server) {
+        await new Promise((resolve) => server.close(resolve));
+    }
+
+    await prisma.$disconnect();
+
+    if (signal === "SIGUSR2") {
+        process.kill(process.pid, signal);
+        return;
+    }
+
+    process.exit(0);
+}
+
+process.once("SIGINT", () => void shutdown("SIGINT"));
+process.once("SIGTERM", () => void shutdown("SIGTERM"));
+process.once("SIGUSR2", () => void shutdown("SIGUSR2"));
+
+async function start() {
+    await prisma.$connect();
+
+    server = app.listen(3000, () => {
+        console.log("Servidor escuchando en http://localhost:3000");
+    });
+}
+
+start().catch((error) => {
+    console.error(error);
+    process.exit(1);
+});
